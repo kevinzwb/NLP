@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_learnnlpwithjava" default="compile.module.learnnlpwithjava">
+  <dirname property="module.learnnlpwithjava.basedir" file="${ant.file.module_learnnlpwithjava}"/>
+  
+  <property name="module.jdk.home.learnnlpwithjava" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.learnnlpwithjava" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.learnnlpwithjava" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.learnnlpwithjava" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="learnnlpwithjava.output.dir" value="${module.learnnlpwithjava.basedir}/out/production/LearnNLPwithJava"/>
+  <property name="learnnlpwithjava.testoutput.dir" value="${module.learnnlpwithjava.basedir}/out/test/LearnNLPwithJava"/>
+  
+  <path id="learnnlpwithjava.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="learnnlpwithjava.module.production.classpath">
+    <path refid="${module.jdk.classpath.learnnlpwithjava}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  <path id="learnnlpwithjava.runtime.production.module.classpath">
+    <pathelement location="${learnnlpwithjava.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  <path id="learnnlpwithjava.module.classpath">
+    <path refid="${module.jdk.classpath.learnnlpwithjava}"/>
+    <pathelement location="${learnnlpwithjava.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  <path id="learnnlpwithjava.runtime.module.classpath">
+    <pathelement location="${learnnlpwithjava.testoutput.dir}"/>
+    <pathelement location="${learnnlpwithjava.output.dir}"/>
+    <path refid="library.kotlinjavaruntime.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.learnnlpwithjava">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.learnnlpwithjava">
+    <patternset refid="excluded.from.module.learnnlpwithjava"/>
+  </patternset>
+  
+  <path id="learnnlpwithjava.module.sourcepath">
+    <dirset dir="${module.learnnlpwithjava.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.learnnlpwithjava" depends="compile.module.learnnlpwithjava.production,compile.module.learnnlpwithjava.tests" description="Compile module LearnNLPwithJava"/>
+  
+  <target name="compile.module.learnnlpwithjava.production" depends="register.custom.compilers" description="Compile module LearnNLPwithJava; production classes">
+    <mkdir dir="${learnnlpwithjava.output.dir}"/>
+    <javac2 destdir="${learnnlpwithjava.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.learnnlpwithjava}/javac">
+      <compilerarg line="${compiler.args.learnnlpwithjava}"/>
+      <bootclasspath refid="learnnlpwithjava.module.bootclasspath"/>
+      <classpath refid="learnnlpwithjava.module.production.classpath"/>
+      <src refid="learnnlpwithjava.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.learnnlpwithjava"/>
+    </javac2>
+    
+    <copy todir="${learnnlpwithjava.output.dir}">
+      <fileset dir="${module.learnnlpwithjava.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.learnnlpwithjava.tests" depends="register.custom.compilers,compile.module.learnnlpwithjava.production" description="compile module LearnNLPwithJava; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.learnnlpwithjava" description="cleanup module">
+    <delete dir="${learnnlpwithjava.output.dir}"/>
+    <delete dir="${learnnlpwithjava.testoutput.dir}"/>
+  </target>
+</project>
